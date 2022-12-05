@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jq-3.3.1/dt-1.10.21/datatables.min.css" />
 
     <script src="https://code.iconify.design/1/1.0.6/iconify.min.js"></script>
@@ -28,22 +29,20 @@
         }
     </style>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-
     <title>SRC HERLINAH</title>
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class=" container-fluid mt-3 ms-5">
-            <a href="/dash_pemilikToko" class="text-decoration-none text-dark">
+            <a href="/pemilikToko" class="text-decoration-none text-dark">
                 <h3 class="fs-4 ms-5">SRC HERLINAH</h3>
             </a>
             <span>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-5 mb-2 mb-lg-0">
                         <li>
-                            ___________________
+                            {{session('user')->nama}}
                         </li>
                         <li class="nav-item dropdown ms-4">
                             <a href="#" class="link-dark" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -51,10 +50,11 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="navbarDropdown">
                                 <li>
-                                    <a class="dropdown-item" href="/profile">Profile</a>
+                                    <a class="dropdown-item" href="/profilePemilik">Profile</a>
                                 </li>
                                 <li>
                                     <hr class="dropdown-divider" />
+
                                 </li>
                                 <li>
                                     <a class="dropdown-item" href="/">Logout</a>
@@ -75,9 +75,6 @@
         });
     </script>
 
-<!-- Modal
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script> -->
 </body>
 
 </html>

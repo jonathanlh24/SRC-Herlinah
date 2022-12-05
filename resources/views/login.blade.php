@@ -52,6 +52,7 @@
                     <input type="password" name="password" class="form-control" placeholder="Password" required>
                 </div>
                 <button type="submit" class="btn btn-primary btn-block mt-4 w-25">Log In</button>
+
                 <div class="mt-4 text-end text-primary">
                     <a data-toggle="modal" data-target="#ModalCenter">Lupa Password</a>
                 </div>

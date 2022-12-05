@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Penjualan;
 use App\Models\User;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -12,11 +13,11 @@ use Illuminate\Routing\Controller as BaseController;
 class userController extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
     public function login(Request $request)
     {
         $pattern = "/[a-zA-Z0-9]+@gmail.com/";
-        if (!preg_match_all($pattern, $request->email)
-        ){
+        if (!preg_match_all($pattern, $request->email)) {
             return redirect('/')->with('error', 'Email atau password yang Anda masukkan salah!');
         }
         $user = User::where('email', $request->email)->first();
@@ -27,27 +28,76 @@ class userController extends BaseController
             return redirect('/')->with('error', 'Email atau password yang Anda masukkan salah!');
         }
         if ($user->role_id == 0) {
-            return redirect('/dash_pemilikToko');
+            session(['user' => $user]);
+            return redirect('/pemilikToko');
         } else {
-            return redirect('/dash_staffToko');
+            $penjualan = Penjualan::select('*')->get();
+            session(['user' => $user]);
+            return redirect('/staffToko')->with('penjualans', $penjualan);
+            // return view('/pages.staff_toko.dash_staff')->with('penjualans', $penjualan);
         }
     }
 
-    public function signup(Request $request)
+    // -------------- PEMILIK TOKO --------------
+    public function dashPemilikToko()
+    {
+        return view('pages.pemilik_toko.profile_pemilik');
+    }
+
+    public function profilePemilik(Request $request)
     {
         $pattern = "/[a-zA-Z0-9]+@gmail.com/";
         if (!preg_match_all($pattern, $request->email)) {
-            return redirect('/signup')->with('error', 'Format Email Salah (example@gmail.com)');
+            return redirect('/profilePemilik')->with('wrongFormat', 'Format Email Salah (example@gmail.com)');
         }
-        if($request->password != $request->konpassword){
-            return redirect('/signup')->with('error', 'Password dan Konfirmasi Password Tidak Sama');
+        $user = User::where('email', $request->oldEmail)->update(['nama' => $request->nama, 'email' => $request->email]);
+        $user = User::where('email', $request->email)->first();
+        session(['user' => $user]);
+        return redirect('/profilePemilik');
+    }
+
+    public function gantiPasswordPemilik(Request $request)
+    {
+        $user = User::where('email', $request->gantipassword)->first();
+        if ($user->password != $request->passlama) {
+            return redirect('/profilePemilik')->with('errorGantipassword', 'Password Lama yang Anda Masukkan Tidak Sesuai !');
         }
-        $user = new User;
-        $user->nama = $request->nama;
-        $user->email = $request->email;
-        $user->password = $request->password;
-        $user->role_id = 1;
-        $user->save();
-        return view('login');
+        if ($request->passbaru != $request->konfirmasipassbaru) {
+            return redirect('/profilePemilik')->with('errorGantipassword', 'Password Baru dan Konfirmasi Password Baru yang Anda Masukkan Tidak Cocok !');
+        }
+        $user = User::where('email', $request->gantipassword)->update(['password' => $request->passbaru]);
+        return redirect('/profilePemilik');
+    }
+
+    // -------------- STAFF TOKO --------------
+    public function dashStaffToko()
+    {
+        return view('pages.staff_toko.profile_staff');
+    }
+
+    public function profileStaff(Request $request)
+    {
+        $pattern = "/[a-zA-Z0-9]+@gmail.com/";
+        if (!preg_match_all($pattern, $request->email)) {
+            return redirect('/profileStaff')->with('wrongFormat', 'Format Email Salah (example@gmail.com)');
+        }
+
+        $user = User::where('email', $request->oldEmail)->update(['nama' => $request->nama, 'email' => $request->email]);
+        $user = User::where('email', $request->email)->first();
+        session(['user' => $user]);
+        return redirect('/profileStaff');
+    }
+
+    public function gantiPasswordStaff(Request $request)
+    {
+        $user = User::where('email', $request->gantipassword)->first();
+        if ($user->password != $request->passlama) {
+            return redirect('/profileStaff')->with('errorGantipassword', 'Password Lama yang Anda masukkan Tidak Sesuai !');
+        }
+        if ($request->passbaru != $request->konfirmasipassbaru) {
+            return redirect('/profileStaff')->with('errorGantipassword', 'Password Baru dan Konfirmasi Password Baru yang Anda masukkan salah!');
+        }
+        $user = User::where('email', $request->gantipassword)->update(['password' => $request->passbaru]);
+        return redirect('/profileStaff');
     }
 }
